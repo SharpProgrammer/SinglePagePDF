@@ -56,3 +56,90 @@ The **Remove_Old_File_If_Present** method is just a supporting method used to en
 
 The **Physically_Write_Out_The_PDF** method takes the list of byte arrays and generates the physical file. Up to this point the built up PDF exists only in memory.
 
+#### The method responsible for generating the text ####
+
+The **Add_First_Page_Text_Layout_To_List** method is the place where changes are made to change the text output on the first and only page.
+
+        private int Add_First_Page_Text_Layout_To_List(int object_counter, int page_width, int page_height, ref List<byte[]> listofbytes)
+        {
+            // Option 2 a loop demonstrating writing 79 lines to the file
+            int vertical_position = 793;
+            int horzontal_position = 10;
+            int font_point_size = 9;
+            int line_spacing = 10;
+            int number_of_lines = 79;
+            string stream_text_for_page = "";
+            stream_text_for_page = stream_text_for_page + "BT " + nl;
+            // font size
+            stream_text_for_page = stream_text_for_page + "/F0 " + font_point_size.ToString() + " Tf " + nl; ;
+            stream_text_for_page = stream_text_for_page + horzontal_position.ToString() + " " + vertical_position.ToString() + " Td " + nl;
+            for (int i = 1; i <= number_of_lines; i++)  // number of lines
+            {
+                // line seperation                
+                stream_text_for_page = stream_text_for_page + "0 -" + line_spacing.ToString() + " Td ";
+                // line content
+                stream_text_for_page = stream_text_for_page + "(Line Number " + i.ToString().PadLeft(2, ' ') + ") Tj " + nl;
+            }
+            stream_text_for_page = stream_text_for_page + "ET " + nl;
+
+            listofbytes.Add(System.Text.Encoding.UTF8.GetBytes(object_counter.ToString() + " 0 obj" + nl));
+            listofbytes.Add(System.Text.Encoding.UTF8.GetBytes("<</Length " 
+                + (stream_text_for_page.Length + 1).ToString() + ">>" + nl));
+            listofbytes.Add(System.Text.Encoding.UTF8.GetBytes("stream" + nl));
+            listofbytes.Add(System.Text.Encoding.UTF8.GetBytes(stream_text_for_page + nl));
+            listofbytes.Add(System.Text.Encoding.UTF8.GetBytes("endstream" + nl));
+            listofbytes.Add(System.Text.Encoding.UTF8.GetBytes("endobj" + nl));
+            return Get_List_Of_Bytes_Total_Count(listofbytes);
+        }
+
+
+we start by setting the parameters for the single 8.5 by 11 inch page
+
+	int vertical_position = 793;
+	int horzontal_position = 10;
+	int font_point_size = 9;
+	int line_spacing = 10;
+	int number_of_lines = 79;
+
+these number are based on the size of the file defined in the **Generate_PDF** method
+
+	int page_height = 792;
+
+We use a simple string to build up a listing of the text for the page
+
+	string stream_text_for_page = "";
+
+Before and after we detail the text for the page we have a beginning and ending marker
+
+	stream_text_for_page = stream_text_for_page + "BT " + nl;
+
+		// detailed text goes here
+
+	stream_text_for_page = stream_text_for_page + "ET " + nl;
+
+
+We work from the top of the page at vertical position of 793 down to 0 at the bottom of the page.
+
+so for each line we first indicate its position
+
+	// line seperation                
+	stream_text_for_page = stream_text_for_page + "0 -" + line_spacing.ToString() + " Td ";
+
+then we output the text one line at a time
+
+	// line content
+	stream_text_for_page = stream_text_for_page + "(Line Number " + i.ToString().PadLeft(2, ' ') + ") Tj " + nl;
+
+At the end of the method all this is put together as an object by these lines. Note how the string containing the data has it's length output as part of the object.
+
+	listofbytes.Add(System.Text.Encoding.UTF8.GetBytes(object_counter.ToString() + " 0 obj" + nl));
+	listofbytes.Add(System.Text.Encoding.UTF8.GetBytes("<</Length " 
+  	+ (stream_text_for_page.Length + 1).ToString() + ">>" + nl));
+	listofbytes.Add(System.Text.Encoding.UTF8.GetBytes("stream" + nl));
+	 listofbytes.Add(System.Text.Encoding.UTF8.GetBytes(stream_text_for_page + nl));
+	listofbytes.Add(System.Text.Encoding.UTF8.GetBytes("endstream" + nl));
+	listofbytes.Add(System.Text.Encoding.UTF8.GetBytes("endobj" + nl));
+
+So I hope this is all the information needed to enable you to make modifications to create your own PDFs
+
+From my perspective the next modification I plan on making is to output a text box as a pdf file, to mix up larger text with smaller text and then finally to support more than one page it the text provided requires it. Stay tuned these changes might make it to git hub as MultiplePagePDF.
