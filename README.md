@@ -101,7 +101,7 @@ we start by setting the parameters for the single 8.5 by 11 inch page
 	int line_spacing = 10;
 	int number_of_lines = 79;
 
-these number are based on the size of the file defined in the **Generate_PDF** method
+these numbers are based on the size of the file defined in the **Generate_PDF** method
 
 	int page_height = 792;
 
