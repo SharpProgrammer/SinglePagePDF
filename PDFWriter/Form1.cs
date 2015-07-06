@@ -48,6 +48,9 @@ namespace PDFWriter
         {
             string filename = "pdf-sample.pdf";
 
+            // Allow multiple runs of the pdF file creation to review different textbox sizes
+            dictionary1.Clear();
+
             Generate_PDF(basepath + filename);
 
             // Open the PDF with the default reader
@@ -131,7 +134,6 @@ namespace PDFWriter
 
                 Physically_Write_Out_The_PDF(ref ListOfByteArrays, writer);
 
-                Output_To_Screen("Done Creating The PDF File");
             }
         }
 
@@ -334,6 +336,18 @@ namespace PDFWriter
             {
                 writer.Write(ba1);
             }
+        }
+
+        // ========================================================================================
+
+        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && (e.KeyCode == Keys.A))
+            {
+                textBox1.SelectAll();
+                e.Handled = true;
+            }
+
         }
 
         // ========================================================================================

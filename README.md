@@ -25,7 +25,7 @@ This project will demonstrate the creation of a fully working PDF file in code. 
 - Get_List_Of_Bytes_Total_Count
 - Remove_Old_File_If_Present
 - Physically_Write_Out_The_PDF
-
+- textBox1_KeyDown
 
 
 The **Output_To_Screen**, **button1_Click** and **Form1_Load** just support the basic windows form style of application so my comments will be focused on the methods which deal with the actual creation of the PDF file.
@@ -50,7 +50,7 @@ Each PDF file also contains a Cross Reference Table so the method  **Add_Cross_R
 
 Lastly we use the these two methods **Add_Trailer_To_List** and **Add_End_Of_File** to finish off the last few objects needed to make a complete PDF file.
 
-The supporting method **Get_List_Of_Bytes_Total_Count** provides the count of the number of bytes in a specific byte array
+The supporting method **Get_List_Of_Bytes_Total_Count** provides the count of the number of bytes in a specific byte array. Another supporting method **textBox1_KeyDown** is used to provide basic select all functionality to the textbox but is not used in this simple example.
 
 The **Remove_Old_File_If_Present** method is just a supporting method used to ensure we generate a new file each time the program is run. Its more for a debugging sort of functionality supporting the way the windows form application generates a new file each time the button is pressed.
 
@@ -140,6 +140,4 @@ At the end of the method all this is put together as an object by these lines. N
 	listofbytes.Add(System.Text.Encoding.UTF8.GetBytes("endstream" + nl));
 	listofbytes.Add(System.Text.Encoding.UTF8.GetBytes("endobj" + nl));
 
-So I hope this is all the information needed to enable you to make modifications to create your own PDFs
-
-From my perspective the next modification I plan on making is to output a text box as a pdf file, to mix up larger text with smaller text and then finally to support more than one page it the text provided requires it. Stay tuned these changes might make it to git hub as MultiplePagePDF.
+So I hope this is all the information needed to enable you to make modifications to create your own PDFs. See the wiki page for the modification to the program needed to output all the text within a text box as a PDF file. The next modification I plan on making is to mix up larger text with smaller text and then finally to support more than one page if the text provided requires it. Stay tuned these changes might make it into the Wiki or to git hub as a separate MultiplePagePDF project.
